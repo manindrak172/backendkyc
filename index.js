@@ -1,15 +1,41 @@
-const express=require('express')
+// server.js
+const express = require('express');
+// const connectDB = require('./config/db');
+const dotenv = require('dotenv');
+const authRoutes = require('./auth');
+const mongoose = require('mongoose');
+dotenv.config();
 
-//mongodb+srv://A123:A123@123@cluster0.hd7pf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-const app=express()
+const app = express();
+const connectDB = async () => {
+    try {
+      await mongoose.connect('mongodb+srv://A123:A123%40123@cluster0.hd7pf.mongodb.net/keydata', {
+       
+      });
+      console.log('MongoDB connected...');
+    } catch (err) {
+      console.error(err.message);
+      process.exit(1);
+    }
+  };
+  
 
 
+connectDB();
+
+
+
+
+app.use(express.json());
+
+// Routes
+app.use('/api/auth', authRoutes);
 app.get('/',(req,res)=>{
-    res.status(200).json('server Start')
+    res.status(200).json({messages:'serverwordking'})
 })
 
+const PORT = process.env.PORT || 3000;
 
-
-app.listen(3000,()=>{
-    console.log('server Start 3000')
-})
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
